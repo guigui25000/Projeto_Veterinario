@@ -5,8 +5,6 @@ import org.springframework.data.annotation.Id;
 @Data
 public class VeterinarioDTO {
 
-    private String id;
-
     private String CRMV;
 
     private String nome;

@@ -17,5 +17,5 @@ public class PetDTO {
 
     private Double peso;
 
-    private Cliente cliente;
+    private String cliente;
 }
