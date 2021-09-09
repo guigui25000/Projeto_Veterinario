@@ -1,13 +1,21 @@
 package br.com.letscode.projetopetshopwebfluxmongodb.Utils;
 
+import br.com.letscode.projetopetshopwebfluxmongodb.DTO.ConsultaDTO;
+import br.com.letscode.projetopetshopwebfluxmongodb.DTO.ConulstaDTOCriarConsulta;
 import br.com.letscode.projetopetshopwebfluxmongodb.DTO.PetDTO;
+import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Consulta;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Pet;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Veterinario;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.VeterinarioDTO;
+import br.com.letscode.projetopetshopwebfluxmongodb.Repository.ConsultaRepository;
 import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDate;
 
 public class DTOConverter {
+
 
 
     public static PetDTO entityToDto(Pet pet) {
@@ -32,5 +40,14 @@ public class DTOConverter {
         Veterinario veterinario = new Veterinario();
         BeanUtils.copyProperties(veterinarioDTO, veterinario);
         return veterinario;
+    }
+
+    public static Consulta consuDtoToEntity(ConulstaDTOCriarConsulta consultaDTO){
+        Consulta consulta = new Consulta();
+        consulta.setData(LocalDate.now());
+        consulta.setPet(consultaDTO.getPet());
+        consulta.setVeterinario(consultaDTO.getVeterinario());
+        consulta.setDescricao(consultaDTO.getDescricao());
+        return consulta;
     }
 }
