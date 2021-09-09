@@ -40,7 +40,7 @@ public class ConsultaControler {
     }
 
     @PostMapping("create")
-    public ResponseEntity<Mono<ConsultaDTO>> createPet(@RequestBody ConsultaDTO consultaDTO) {
+    public ResponseEntity<Mono<Consulta>> createPet(@RequestBody ConsultaDTO consultaDTO) {
         return ResponseEntity.ok().body(consultaService.createConsulta(consultaDTO));
     }
 }

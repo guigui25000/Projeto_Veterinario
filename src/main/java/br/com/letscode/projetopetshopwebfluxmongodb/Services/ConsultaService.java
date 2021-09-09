@@ -6,6 +6,7 @@ import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Consulta;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Pet;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Veterinario;
 import br.com.letscode.projetopetshopwebfluxmongodb.Repository.ConsultaRepository;
+import br.com.letscode.projetopetshopwebfluxmongodb.Utils.DTOConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -35,6 +36,11 @@ public class ConsultaService {
     //Erro q preciso falar com o bruno
     public Mono<Consulta> createConsulta(ConsultaDTO consultaDTO) {
         ConulstaDTOCriarConsulta consuDTO = new ConulstaDTOCriarConsulta();
-        consuDTO.setPet(petsServices.findById(consultaDTO.getPetID()).block();
+        consuDTO.setPet(petsServices.findById(consultaDTO.getPetID()).map(DTOConverter::dtoToEntity).block());
+        consuDTO.setVeterinario(veterinarioServices.findById(consultaDTO.getVeterinarioID()).map(DTOConverter::vetDtoToEntity).block());
+        consuDTO.setDescricao(consultaDTO.getDescricao());
+        return Mono.just(consuDTO)
+                .map(DTOConverter::consuDtoToEntity)
+                .flatMap(consultaRepository::insert);
     }
 }
