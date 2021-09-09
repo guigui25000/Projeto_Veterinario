@@ -1,8 +1,8 @@
 package br.com.letscode.projetopetshopwebfluxmongodb.Controller;
 
-
 import br.com.letscode.projetopetshopwebfluxmongodb.DTO.PetDTO;
-import br.com.letscode.projetopetshopwebfluxmongodb.Services.PetsServices;
+import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Cliente;
+import br.com.letscode.projetopetshopwebfluxmongodb.Services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,36 +16,37 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@RestController()
-@RequestMapping("/pets")
-public class PetsController {
+@RestController
+@RequestMapping("/cliente")
+public class ClinteControler {
+
     @Autowired
-    private PetsServices services;
+    private ClienteService clienteService;
 
     @GetMapping
-    public ResponseEntity<Flux<PetDTO>> getAll() {
-        return ResponseEntity.ok().body(services.getAll());
+    public ResponseEntity<Flux<Cliente>> getAll() {
+        return ResponseEntity.ok().body(clienteService.getAll());
 
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Mono<PetDTO>> getById(@PathVariable String id) {
-        return ResponseEntity.ok().body(services.findById(id));
+    public ResponseEntity<Mono<Cliente>> getById(@PathVariable String id) {
+        return ResponseEntity.ok().body(clienteService.findById(id));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Mono<Void>> deletePet(@PathVariable String id) {
-        return ResponseEntity.ok().body(services.deletePet(id));
+        return ResponseEntity.ok().body(clienteService.deleteCliente(id));
     }
 
     @PostMapping("create")
-    public ResponseEntity<Mono<PetDTO>> createPet(@RequestBody Mono<PetDTO> petDTO) {
-        return ResponseEntity.ok().body(services.createPet(petDTO));
+    public ResponseEntity<Mono<Cliente>> createPet(@RequestBody Mono<Cliente> cliente) {
+        return ResponseEntity.ok().body(clienteService.createCliente(cliente));
     }
 
-    @PutMapping("/atualizar/{id}")
-    public ResponseEntity<Mono<PetDTO>> updatePet(@RequestBody Mono<PetDTO> petDTO, @PathVariable String id) {
-        return ResponseEntity.ok().body(services.updatePet(petDTO, id));
+    @PutMapping("/atualizar")
+    public ResponseEntity<Mono<Cliente>> updatePet(@RequestBody Mono<Cliente> cliente) {
+        return ResponseEntity.ok().body(clienteService.updateCliente(cliente));
     }
 
 }
