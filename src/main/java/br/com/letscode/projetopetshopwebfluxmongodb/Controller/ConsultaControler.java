@@ -35,12 +35,12 @@ public class ConsultaControler {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Mono<Void>> deletePet(@PathVariable String id) {
+    public ResponseEntity<Mono<Void>> deleteConsulta(@PathVariable String id) {
         return ResponseEntity.ok().body(consultaService.deleteConsulta(id));
     }
 
     @PostMapping("create")
-    public ResponseEntity<Mono<Consulta>> createPet(@RequestBody ConsultaDTO consultaDTO) {
+    public ResponseEntity<Mono<Consulta>> createConsulta(@RequestBody ConsultaDTO consultaDTO) {
         return ResponseEntity.ok().body(consultaService.createConsulta(consultaDTO));
     }
 }
