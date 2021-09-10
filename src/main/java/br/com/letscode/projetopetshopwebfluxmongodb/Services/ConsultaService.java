@@ -7,10 +7,13 @@ import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Pet;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Veterinario;
 import br.com.letscode.projetopetshopwebfluxmongodb.Repository.ConsultaRepository;
 import br.com.letscode.projetopetshopwebfluxmongodb.Utils.DTOConverter;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.beans.Beans;
 
 @Service
 public class ConsultaService {
@@ -33,14 +36,29 @@ public class ConsultaService {
         return consultaRepository.deleteById(id);
     }
 
-    //Erro q preciso falar com o bruno
     public Mono<Consulta> createConsulta(ConsultaDTO consultaDTO) {
         ConulstaDTOCriarConsulta consuDTO = new ConulstaDTOCriarConsulta();
-        consuDTO.setPet(petsServices.findById(consultaDTO.getPetID()).map(DTOConverter::dtoToEntity).block());
-        consuDTO.setVeterinario(veterinarioServices.findById(consultaDTO.getVeterinarioID()).map(DTOConverter::vetDtoToEntity).block());
+        Pet pet = getPet(consultaDTO);
+        Veterinario veterinario = getVeterinario(consultaDTO);
+        consuDTO.setPet(pet);
+        consuDTO.setVeterinario(veterinario);
         consuDTO.setDescricao(consultaDTO.getDescricao());
         return Mono.just(consuDTO)
                 .map(DTOConverter::consuDtoToEntity)
                 .flatMap(consultaRepository::insert);
+    }
+
+    private Veterinario getVeterinario(ConsultaDTO consultaDTO) {
+        Veterinario veterinario = new Veterinario();
+        BeanUtils.copyProperties(veterinarioServices.findById(consultaDTO.getVeterinarioID())
+                .map(DTOConverter::vetDtoToEntity),veterinario);
+        return veterinario;
+    }
+
+    private Pet getPet(ConsultaDTO consultaDTO) {
+        Pet pet = new Pet();
+        BeanUtils.copyProperties(petsServices.findById(consultaDTO.getPetID())
+                .map(DTOConverter::dtoToEntity),pet);
+        return pet;
     }
 }

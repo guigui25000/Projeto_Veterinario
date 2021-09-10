@@ -2,6 +2,8 @@ package br.com.letscode.projetopetshopwebfluxmongodb.Services;
 
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Cliente;
 import br.com.letscode.projetopetshopwebfluxmongodb.Repository.ClienteRepository;
+import br.com.letscode.projetopetshopwebfluxmongodb.Utils.DTOConverter;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -29,8 +31,10 @@ public class ClienteService {
         return Mono.from(clienteRepository.insert(cliente));
 
     }
-
-    public Mono<Cliente> updateCliente(Mono<Cliente> cliente) {
-        return Mono.from(clienteRepository.insert(cliente));
+    public Mono<Cliente> updateCliente(Mono<Cliente> cliente,String id) {
+        return clienteRepository.findById(id)
+                .flatMap(e -> cliente)
+                .doOnNext(p -> p.setId(id))
+                .flatMap(clienteRepository::save);
     }
 }

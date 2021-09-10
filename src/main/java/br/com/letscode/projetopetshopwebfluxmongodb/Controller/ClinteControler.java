@@ -44,9 +44,9 @@ public class ClinteControler {
         return ResponseEntity.ok().body(clienteService.createCliente(cliente));
     }
 
-    @PutMapping("/atualizar")
-    public ResponseEntity<Mono<Cliente>> updatePet(@RequestBody Mono<Cliente> cliente) {
-        return ResponseEntity.ok().body(clienteService.updateCliente(cliente));
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<Mono<Cliente>> updatePet(@RequestBody Mono<Cliente> cliente,@PathVariable String id) {
+        return ResponseEntity.ok().body(clienteService.updateCliente(cliente,id));
     }
 
 }
