@@ -1,10 +1,12 @@
 package br.com.letscode.projetopetshopwebfluxmongodb.Services;
 
 import br.com.letscode.projetopetshopwebfluxmongodb.DTO.ConsultaDTO;
-import br.com.letscode.projetopetshopwebfluxmongodb.DTO.ConulstaDTOCriarConsulta;
+import br.com.letscode.projetopetshopwebfluxmongodb.DTO.PetDTO;
+import br.com.letscode.projetopetshopwebfluxmongodb.DTO.RetornoConsultaDTO;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Consulta;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Pet;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Veterinario;
+import br.com.letscode.projetopetshopwebfluxmongodb.Entity.VeterinarioDTO;
 import br.com.letscode.projetopetshopwebfluxmongodb.Repository.ConsultaRepository;
 import br.com.letscode.projetopetshopwebfluxmongodb.Utils.DTOConverter;
 import org.springframework.beans.BeanUtils;
@@ -12,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.beans.Beans;
 
 @Service
 public class ConsultaService {
@@ -36,29 +36,40 @@ public class ConsultaService {
         return consultaRepository.deleteById(id);
     }
 
-    public Mono<Consulta> createConsulta(ConsultaDTO consultaDTO) {
-        ConulstaDTOCriarConsulta consuDTO = new ConulstaDTOCriarConsulta();
-        Pet pet = getPet(consultaDTO);
-        Veterinario veterinario = getVeterinario(consultaDTO);
-        consuDTO.setPet(pet);
-        consuDTO.setVeterinario(veterinario);
+    public Flux<RetornoConsultaDTO> createConsulta(ConsultaDTO consultaDTO) {
+        RetornoConsultaDTO consuDTO = new RetornoConsultaDTO();
+        consuDTO.setVeterinario(getVeterinario(consultaDTO));
+        consuDTO.setPet(getPet(consultaDTO));
         consuDTO.setDescricao(consultaDTO.getDescricao());
-        return Mono.just(consuDTO)
+        return Flux.just(consultaDTO)
                 .map(DTOConverter::consuDtoToEntity)
-                .flatMap(consultaRepository::insert);
+                .flatMap(consultaRepository::insert)
+                .map(e -> consuDTO);
+
     }
 
-    private Veterinario getVeterinario(ConsultaDTO consultaDTO) {
-        Veterinario veterinario = new Veterinario();
-        BeanUtils.copyProperties(veterinarioServices.findById(consultaDTO.getVeterinarioID())
-                .map(DTOConverter::vetDtoToEntity),veterinario);
-        return veterinario;
+    private VeterinarioDTO getVeterinario(ConsultaDTO consultaDTO) {
+        String vetid = consultaDTO.getVeterinarioID();
+        VeterinarioDTO vet = new VeterinarioDTO();
+        veterinarioServices.findById(vetid).subscribe(e -> {
+            vet.setCRMV(e.getCRMV());
+            vet.setEndereco(e.getEndereco());
+            vet.setIdade(e.getIdade());
+            vet.setNome(e.getNome());
+        });
+        return vet;
     }
 
-    private Pet getPet(ConsultaDTO consultaDTO) {
-        Pet pet = new Pet();
-        BeanUtils.copyProperties(petsServices.findById(consultaDTO.getPetID())
-                .map(DTOConverter::dtoToEntity),pet);
+    private PetDTO getPet(ConsultaDTO consultaDTO) {
+        PetDTO pet = new PetDTO();
+        String petid = consultaDTO.getPetID();
+        petsServices.findById(petid).subscribe(e -> {
+            pet.setIdade(e.getIdade());
+            pet.setCliente(e.getCliente());
+            pet.setPeso(e.getPeso());
+            pet.setSexo(e.getSexo());
+            pet.setEspecie(e.getEspecie());
+        });
         return pet;
     }
 }

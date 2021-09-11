@@ -13,11 +13,9 @@ public class Consulta {
     @Id
     private String id;
 
-    @DBRef
-    private Pet pet;
+    private String petId;
     private LocalDate data;
-    @DBRef
-    private Veterinario veterinario;
+    private String veterinarioId;
     private String descricao;
 
 }
