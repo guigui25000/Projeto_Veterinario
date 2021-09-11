@@ -2,6 +2,7 @@ package br.com.letscode.projetopetshopwebfluxmongodb.Controller;
 
 
 import br.com.letscode.projetopetshopwebfluxmongodb.DTO.PetDTO;
+import br.com.letscode.projetopetshopwebfluxmongodb.DTO.PetDTORetorno;
 import br.com.letscode.projetopetshopwebfluxmongodb.Services.PetsServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class PetsController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<Mono<PetDTO>> createPet(@RequestBody Mono<PetDTO> petDTO) {
+    public ResponseEntity<Flux<PetDTORetorno>> createPet(@RequestBody PetDTO petDTO) {
         return ResponseEntity.ok().body(services.createPet(petDTO));
     }
 

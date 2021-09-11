@@ -2,6 +2,7 @@ package br.com.letscode.projetopetshopwebfluxmongodb.Services;
 
 import br.com.letscode.projetopetshopwebfluxmongodb.DTO.ConsultaDTO;
 import br.com.letscode.projetopetshopwebfluxmongodb.DTO.PetDTO;
+import br.com.letscode.projetopetshopwebfluxmongodb.DTO.PetDTORetorno;
 import br.com.letscode.projetopetshopwebfluxmongodb.DTO.RetornoConsultaDTO;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Consulta;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Veterinario;
@@ -57,12 +58,12 @@ public class ConsultaService {
         return vet;
     }
 
-    private PetDTO getPet(ConsultaDTO consultaDTO) {
-        PetDTO pet = new PetDTO();
+    private PetDTORetorno getPet(ConsultaDTO consultaDTO) {
+        PetDTORetorno pet = new PetDTORetorno();
         String petid = consultaDTO.getPetID();
         petsServices.findById(petid).subscribe(e -> {
             pet.setIdade(e.getIdade());
-            pet.setCliente(e.getCliente());
+            pet.setCliente(petsServices.getCliente(e.getCliente()));
             pet.setPeso(e.getPeso());
             pet.setSexo(e.getSexo());
             pet.setEspecie(e.getEspecie());

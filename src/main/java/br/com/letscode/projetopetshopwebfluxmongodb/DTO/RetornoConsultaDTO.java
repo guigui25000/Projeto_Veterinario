@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class RetornoConsultaDTO {
-    private PetDTO pet;
+    private PetDTORetorno pet;
     private Veterinario veterinario;
     private String descricao;
 }

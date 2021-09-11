@@ -20,6 +20,5 @@ public class Pet {
 
     private Double peso;
 
-    @DBRef
-    private Cliente cliente;
+    private String cliente;
 }
