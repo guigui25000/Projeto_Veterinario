@@ -2,7 +2,7 @@ package br.com.letscode.projetopetshopwebfluxmongodb.Entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

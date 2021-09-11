@@ -1,7 +1,6 @@
 package br.com.letscode.projetopetshopwebfluxmongodb.Controller;
 
-import br.com.letscode.projetopetshopwebfluxmongodb.DTO.PetDTO;
-import br.com.letscode.projetopetshopwebfluxmongodb.Entity.VeterinarioDTO;
+import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Veterinario;
 import br.com.letscode.projetopetshopwebfluxmongodb.Services.VeterinarioServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +15,13 @@ public class VeterinarioController {
     private VeterinarioServices services;
 
     @GetMapping
-    public ResponseEntity<Flux<VeterinarioDTO>> getAll() {
+    public ResponseEntity<Flux<Veterinario>> getAll() {
         return ResponseEntity.ok().body(services.getAll());
 
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Mono<VeterinarioDTO>> getById(@PathVariable String id) {
+    public ResponseEntity<Mono<Veterinario>> getById(@PathVariable String id) {
         return ResponseEntity.ok().body(services.findById(id));
     }
 
@@ -32,12 +31,12 @@ public class VeterinarioController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<Mono<VeterinarioDTO>> createPet(@RequestBody Mono<VeterinarioDTO> veterinarioDTO) {
+    public ResponseEntity<Mono<Veterinario>> createPet(@RequestBody Mono<Veterinario> veterinarioDTO) {
         return ResponseEntity.ok().body(services.createVeterinario(veterinarioDTO));
     }
 
     @PutMapping("/atualizar/{id}")
-    public ResponseEntity<Mono<VeterinarioDTO>> updatePet(@RequestBody Mono<VeterinarioDTO> veterinarioDTO, @PathVariable String id) {
+    public ResponseEntity<Mono<Veterinario>> updatePet(@RequestBody Mono<Veterinario> veterinarioDTO, @PathVariable String id) {
         return ResponseEntity.ok().body(services.updateVeterinario(veterinarioDTO, id));
     }
 }

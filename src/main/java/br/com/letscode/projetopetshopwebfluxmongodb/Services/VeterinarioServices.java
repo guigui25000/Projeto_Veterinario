@@ -1,7 +1,7 @@
 package br.com.letscode.projetopetshopwebfluxmongodb.Services;
 
 
-import br.com.letscode.projetopetshopwebfluxmongodb.Entity.VeterinarioDTO;
+import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Veterinario;
 import br.com.letscode.projetopetshopwebfluxmongodb.Repository.VeterinarioRepository;
 import br.com.letscode.projetopetshopwebfluxmongodb.Utils.DTOConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,32 +15,27 @@ public class VeterinarioServices {
     @Autowired
     private VeterinarioRepository repository;
 
-    public Mono<VeterinarioDTO> findById(String id) {
-        return repository.findById(id)
-                .map(DTOConverter::vetEntityToDto);
+    public Mono<Veterinario> findById(String id) {
+        return repository.findById(id);
     }
 
     public Void deleteVeterinario(String id) {
         return Void.TYPE.cast(repository.deleteById(id));
     }
 
-    public Mono<VeterinarioDTO> updateVeterinario(Mono<VeterinarioDTO> veterinarioDTO, String id) {
+    public Mono<Veterinario> updateVeterinario(Mono<Veterinario> veterinarioDTO, String id) {
         return repository.findById(id)
-                .flatMap(v -> veterinarioDTO.map(DTOConverter::vetDtoToEntity)
-                        .doOnNext(e -> e.setId(id)))
-                .flatMap(repository::save)
-                .map(DTOConverter::vetEntityToDto);
+                .flatMap(e -> veterinarioDTO)
+                .doOnNext(p -> p.setId(id))
+                .flatMap(repository::save);
     }
 
-    public Mono<VeterinarioDTO> createVeterinario(Mono<VeterinarioDTO> veterinarioDTO) {
+    public Mono<Veterinario> createVeterinario(Mono<Veterinario> veterinarioDTO) {
         return veterinarioDTO
-                .map(DTOConverter::vetDtoToEntity)
-                .flatMap(repository::insert)
-                .map(DTOConverter::vetEntityToDto);
+                .flatMap(repository::insert);
     }
 
-    public Flux<VeterinarioDTO> getAll() {
-        return repository.findAll()
-                .map(DTOConverter::vetEntityToDto);
+    public Flux<Veterinario> getAll() {
+        return repository.findAll();
     }
 }

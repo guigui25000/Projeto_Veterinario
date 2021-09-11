@@ -4,12 +4,9 @@ import br.com.letscode.projetopetshopwebfluxmongodb.DTO.ConsultaDTO;
 import br.com.letscode.projetopetshopwebfluxmongodb.DTO.PetDTO;
 import br.com.letscode.projetopetshopwebfluxmongodb.DTO.RetornoConsultaDTO;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Consulta;
-import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Pet;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Veterinario;
-import br.com.letscode.projetopetshopwebfluxmongodb.Entity.VeterinarioDTO;
 import br.com.letscode.projetopetshopwebfluxmongodb.Repository.ConsultaRepository;
 import br.com.letscode.projetopetshopwebfluxmongodb.Utils.DTOConverter;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -48,9 +45,9 @@ public class ConsultaService {
 
     }
 
-    private VeterinarioDTO getVeterinario(ConsultaDTO consultaDTO) {
+    private Veterinario getVeterinario(ConsultaDTO consultaDTO) {
         String vetid = consultaDTO.getVeterinarioID();
-        VeterinarioDTO vet = new VeterinarioDTO();
+        Veterinario vet = new Veterinario();
         veterinarioServices.findById(vetid).subscribe(e -> {
             vet.setCRMV(e.getCRMV());
             vet.setEndereco(e.getEndereco());

@@ -16,5 +16,5 @@ public class Veterinario {
 
     private Integer idade;
 
-    private String endereco;
+    private Endereco endereco;
 }
