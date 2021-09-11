@@ -1,6 +1,7 @@
 package br.com.letscode.projetopetshopwebfluxmongodb.Controller;
 
 import br.com.letscode.projetopetshopwebfluxmongodb.DTO.ConsultaDTO;
+import br.com.letscode.projetopetshopwebfluxmongodb.DTO.RetornoConsultaDTO;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Cliente;
 import br.com.letscode.projetopetshopwebfluxmongodb.Entity.Consulta;
 import br.com.letscode.projetopetshopwebfluxmongodb.Services.ConsultaService;
@@ -40,7 +41,7 @@ public class ConsultaControler {
     }
 
     @PostMapping("create")
-    public ResponseEntity<Mono<Consulta>> createConsulta(@RequestBody ConsultaDTO consultaDTO) {
+    public ResponseEntity<Flux<RetornoConsultaDTO>> createConsulta(@RequestBody ConsultaDTO consultaDTO) {
         return ResponseEntity.ok().body(consultaService.createConsulta(consultaDTO));
     }
 }
